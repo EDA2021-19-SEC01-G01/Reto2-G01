@@ -30,6 +30,10 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import insertionsort as ins
+from DISClib.Algorithms.Sorting import selectionsort as sls
+from DISClib.Algorithms.Sorting import quicksort as qck
+from DISClib.Algorithms.Sorting import mergesort as mrg
 assert cf
 
 """
@@ -38,13 +42,59 @@ los mismos.
 """
 
 # Construccion de modelos
+def newCatalog():
+    
+    catalog = {'videos': None,
+               'categorias': None}
 
+    catalog['videos'] = lt.newList('ARRAY_LIST')
+    catalog['categorias'] = mp.newMap(18,maptype='PROBING',loadfactor=0.5)
+    return catalog
 # Funciones para agregar informacion al catalogo
+def addCategory(catalog, id):
+    """
+    Adiciona una categoría a la lista de categorias.
+    """
+    mp.put(catalog['categorias'],id,lt.newList('ARRAY_LIST'))
+
+def addVideo(catalog, video):
+    lt.addLast(catalog['videos'],video)
+
+def addVideoPerCat(catalog,video,id):
+    lista = (mp.get(catalog['categorias'],id))['value']
+    lt.addLast(lista,video)
 
 # Funciones para creacion de datos
 
 # Funciones de consulta
+def reqCero (catalog, n, cate):
+    dataCat = (mp.get(catalog['categorias'],cate))['value']
+    return (sortVideos(dataCat,4,cmpVideosByViews,n))
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def cmpVideosByViews(video1, video2):
+    """
+    Devuelve verdadero (True) si los Views de video1 son mayores que los del video2
+    Args:
+    video1: informacion del primer video que incluye su valor 'views'
+    video2: informacion del segundo video que incluye su valor 'views'
+    """
+    return (int(video1['views']) > int(video2['views']))
 # Funciones de ordenamiento
+def comoOrdenar (sub_list,cmpF,ordAlg):
+    if ordAlg == 1:
+        return sa.sort(sub_list, cmpF)
+    elif ordAlg == 2:
+        return ins.sort(sub_list, cmpF)
+    elif ordAlg == 3:
+        return sls.sort(sub_list, cmpF)
+    elif ordAlg == 4:
+        return mrg.sort(sub_list, cmpF)
+    elif ordAlg == 5:
+        return qck.sort(sub_list, cmpF)
+
+def sortVideos (listaO,ordAlg,cmp,n):
+    sorted_list = comoOrdenar(listaO,cmp,ordAlg)
+    subList = lt.subList(sorted_list,1,n)
+    return subList

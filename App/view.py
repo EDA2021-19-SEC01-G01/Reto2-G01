@@ -24,6 +24,7 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+from DISClib.ADT import map as mp
 assert cf
 
 
@@ -37,7 +38,8 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Ordenar los n videos con más views para una categoría específica")
+    print("0- Salir")
 
 catalog = None
 
@@ -47,12 +49,18 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
+    if int(inputs) == 1:
         print("Cargando información de los archivos ....")
-
-    elif int(inputs[0]) == 2:
-        pass
-
+        catalog = controller.initCatalog()
+        controller.loadData(catalog)
+        print ("La cantidad de videos cargados son: " + str(lt.size(catalog['videos'])))
+        print ("La cantidad de categorías cargadas son: " + str(mp.size(catalog['categorias'])))
+    elif int(inputs) == 2:
+        n = int(input("Ingrese el número de videos: "))
+        cate = input("Ingrese el id de la categoría a filtrar: ")
+        print(controller.reqCero(catalog,n,cate))
+    elif int(inputs) == 0:
+        sys.exit(0)
     else:
         sys.exit(0)
 sys.exit(0)
