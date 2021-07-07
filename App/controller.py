@@ -60,7 +60,7 @@ def loadData(catalog):
 
 def loadVideos(catalog):
     
-    booksfile = cf.data_dir + 'videos-small.csv'
+    booksfile = cf.data_dir + 'videos-large.csv'
     input_file = csv.DictReader(open(booksfile, encoding='utf-8'),delimiter=',')
     categorias = []
     for video in input_file:
