@@ -52,9 +52,11 @@ while True:
     if int(inputs) == 1:
         print("Cargando información de los archivos ....")
         catalog = controller.initCatalog()
-        controller.loadData(catalog)
+        measure = controller.loadData(catalog)
         print ("La cantidad de videos cargados son: " + str(lt.size(catalog['videos'])))
         print ("La cantidad de categorías cargadas son: " + str(mp.size(catalog['categorias'])))
+        print ("Tiempo [ms]: ", f"{measure[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{measure[1]:.3f}")
     elif int(inputs) == 2:
         n = int(input("Ingrese el número de videos: "))
         cate = input("Ingrese el id de la categoría a filtrar: ")
