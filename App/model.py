@@ -48,7 +48,7 @@ def newCatalog():
                'categorias': None}
 
     catalog['videos'] = lt.newList('ARRAY_LIST')
-    catalog['categorias'] = mp.newMap(18,maptype='CHAINING',loadfactor=6.0)
+    catalog['categorias'] = mp.newMap(18,maptype='PROBING',loadfactor=0.5)
     return catalog
 # Funciones para agregar informacion al catalogo
 def addCategory(catalog, id):
@@ -69,7 +69,27 @@ def addVideoPerCat(catalog,video,id):
 # Funciones de consulta
 def reqCero (catalog, n, cate):
     dataCat = (mp.get(catalog['categorias'],cate))['value']
-    return (sortVideos(dataCat,4,cmpVideosByViews,n))
+    return (lt.subList(sortVideos(dataCat,4,cmpVideosByViews),1,n))
+
+def reqUno (catalog,n,categoria,pais):
+    dataCat = (mp.get(catalog['categorias'],categoria))['value']
+    catSort = sortVideos(dataCat,4,cmpVideosByLikes)
+    catPais = lt.subList(filtroPais(catSort,pais),1,n)
+    return catPais
+
+def filtroPais(lista, country):
+    soloCountry = lt.newList("ARRAY_LIST")
+    ids = []
+    vid = lista
+    tamano = lt.size(vid)
+    for i in range(1,tamano+1):
+        ele = lt.getElement(vid,i)
+        c1 = ele['country']
+        id1 = ele['video_id']
+        if c1 == country and (id1 in ids) == False:
+            lt.addLast(soloCountry, ele)
+            ids.append(id1)
+    return soloCountry
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -81,6 +101,16 @@ def cmpVideosByViews(video1, video2):
     video2: informacion del segundo video que incluye su valor 'views'
     """
     return (int(video1['views']) > int(video2['views']))
+
+def cmpVideosByLikes(video1, video2):
+    """
+    Devuelve verdadero (True) si los Likes de video1 son mayores que los del video2
+    Args:
+    video1: informacion del primer video que incluye su valor 'likes'
+    video2: informacion del segundo video que incluye su valor 'likes'
+    """
+    return (int(video1['likes']) > int(video2['likes']))
+
 # Funciones de ordenamiento
 def comoOrdenar (sub_list,cmpF,ordAlg):
     if ordAlg == 1:
@@ -94,7 +124,6 @@ def comoOrdenar (sub_list,cmpF,ordAlg):
     elif ordAlg == 5:
         return qck.sort(sub_list, cmpF)
 
-def sortVideos (listaO,ordAlg,cmp,n):
+def sortVideos (listaO,ordAlg,cmp):
     sorted_list = comoOrdenar(listaO,cmp,ordAlg)
-    subList = lt.subList(sorted_list,1,n)
-    return subList
+    return sorted_list

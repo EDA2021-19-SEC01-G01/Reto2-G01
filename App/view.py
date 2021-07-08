@@ -39,6 +39,7 @@ def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Ordenar los n videos con más views para una categoría específica")
+    print("3- Requerimiento 1")
     print("0- Salir")
 
 catalog = None
@@ -52,15 +53,21 @@ while True:
     if int(inputs) == 1:
         print("Cargando información de los archivos ....")
         catalog = controller.initCatalog()
-        measure = controller.loadData(catalog)
+        #measure = controller.loadData(catalog)
+        controller.loadData(catalog)
         print ("La cantidad de videos cargados son: " + str(lt.size(catalog['videos'])))
         print ("La cantidad de categorías cargadas son: " + str(mp.size(catalog['categorias'])))
-        print ("Tiempo [ms]: ", f"{measure[0]:.3f}", "  ||  ",
-              "Memoria [kB]: ", f"{measure[1]:.3f}")
+        #print ("Tiempo [ms]: ", f"{measure[0]:.3f}", "  ||  ",
+        #      "Memoria [kB]: ", f"{measure[1]:.3f}")
     elif int(inputs) == 2:
         n = int(input("Ingrese el número de videos: "))
         cate = input("Ingrese el id de la categoría a filtrar: ")
         print(controller.reqCero(catalog,n,cate))
+    elif int(inputs) == 3:
+        categoria = input("Ingrese el id de la categoría a consultar: ")
+        pais = input("Ingrese el país filtro: ")
+        n = int(input("Ingrese el número de videos: "))
+        print(controller.reqUno(catalog,n,categoria,pais))
     elif int(inputs) == 0:
         sys.exit(0)
     else:

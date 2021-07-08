@@ -40,23 +40,23 @@ def initCatalog():
     return catalog
 # Funciones para la carga de datos
 def loadData(catalog):
-    delta_time = -1.0
-    delta_memory = -1.0
+    #delta_time = -1.0
+    #delta_memory = -1.0
 
-    tracemalloc.start()
-    start_time = getTime()
-    start_memory = getMemory()
+    #tracemalloc.start()
+    #start_time = getTime()
+    #start_memory = getMemory()
 
     loadVideos(catalog)
 
-    stop_memory = getMemory()
-    stop_time = getTime()
-    tracemalloc.stop()
+    #stop_memory = getMemory()
+    #stop_time = getTime()
+    #tracemalloc.stop()
 
-    delta_time = stop_time - start_time
-    delta_memory = deltaMemory(start_memory, stop_memory)
+    #delta_time = stop_time - start_time
+    #delta_memory = deltaMemory(start_memory, stop_memory)
 
-    return delta_time, delta_memory
+    #return delta_time, delta_memory
 
 def loadVideos(catalog):
     
@@ -77,6 +77,9 @@ def loadVideos(catalog):
 
 def reqCero(catalog,n,cate):
     return model.reqCero(catalog,n,cate)
+
+def reqUno(catalog,n,categoria,pais):
+    return model.reqUno(catalog,n,categoria,pais)
 
 # Funciones para medir tiempo y memoria
 
