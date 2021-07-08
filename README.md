@@ -19,4 +19,4 @@ Este directorio contiene las pruebas realizadas a los TADs, Estructuras de Datos
 Requerimiento 2: Maria Camila Luna Velasco - 201920993 - m.lunav@uniandes.edu.co
 Requerimiento 3: Santiago Arciniegas Castro - 202014994 - s.arciniegas@uniandes.edu.co
 
-Gracias
+Gracias :)
