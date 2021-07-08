@@ -48,7 +48,7 @@ def newCatalog():
                'categorias': None}
 
     catalog['videos'] = lt.newList('ARRAY_LIST')
-    catalog['categorias'] = mp.newMap(18,maptype='PROBING',loadfactor=0.5)
+    catalog['categorias'] = mp.newMap(18,maptype='CHAINING',loadfactor=6.0)
     return catalog
 # Funciones para agregar informacion al catalogo
 def addCategory(catalog, id):
