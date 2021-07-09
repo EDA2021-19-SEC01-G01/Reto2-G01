@@ -81,6 +81,9 @@ def reqCero(catalog,n,cate):
 def reqUno(catalog,n,categoria,pais):
     return model.reqUno(catalog,n,categoria,pais)
 
+def reqTres(catalog,category):
+    return model.reqTres(catalog,category)
+
 # Funciones para medir tiempo y memoria
 
 def getTime():

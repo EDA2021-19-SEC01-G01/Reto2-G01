@@ -40,6 +40,7 @@ def printMenu():
     print("1- Cargar información en el catálogo")
     print("2- Ordenar los n videos con más views para una categoría específica")
     print("3- Requerimiento 1")
+    print("5- Requerimiento 3")
     print("0- Salir")
 
 catalog = None
@@ -68,6 +69,9 @@ while True:
         pais = input("Ingrese el país filtro: ")
         n = int(input("Ingrese el número de videos: "))
         print(controller.reqUno(catalog,n,categoria,pais))
+    elif int(inputs) == 5:
+        category = input("Ingrese la categoría a consultar: ")
+        print((controller.reqTres(catalog,category))['elements'])
     elif int(inputs) == 0:
         sys.exit(0)
     else:

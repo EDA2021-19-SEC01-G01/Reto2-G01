@@ -77,6 +77,11 @@ def reqUno (catalog,n,categoria,pais):
     catPais = lt.subList(filtroPais(catSort,pais),1,n)
     return catPais
 
+def reqTres (catalog, category):
+    dataCat = (mp.get(catalog['categorias'],category))['value']
+    soloTop = ratioLikesDislikes(dataCat,20)
+    return sortVideos3(soloTop,4,cmpVideosByTrend)
+
 def filtroPais(lista, country):
     soloCountry = lt.newList("ARRAY_LIST")
     ids = []
@@ -90,6 +95,47 @@ def filtroPais(lista, country):
             lt.addLast(soloCountry, ele)
             ids.append(id1)
     return soloCountry
+
+def ratioLikesDislikes (lista, umbral):
+    #Calcula los vídeos con un rating mayor a umbral.
+    dict_id={}
+    lista_id_top=lt.newList("ARRAY_LIST")
+    for j in range(1,lt.size(lista)+1):
+        ele=lt.getElement(lista,j)
+        vid_id=ele['video_id']
+        likes=int(ele["likes"])
+        dislikes=int(ele["dislikes"])
+        title = ele['title']
+        channel_title = ele['channel_title']
+        if vid_id not in dict_id:
+            count=0 
+            dict_id[vid_id]=[likes,dislikes,count+1,title,channel_title]
+        else:
+            dict_id[vid_id][0]=likes
+            dict_id[vid_id][1]=dislikes
+            dict_id[vid_id][2]+=1
+    for i in dict_id:
+        if dict_id[i][1]==0 and dict_id[i][0]>0:
+            xd = lt.newList("ARRAY_LIST")
+            lt.addLast(xd,dict_id[i][3])
+            lt.addLast(xd,dict_id[i][4])
+            lt.addLast(xd,"no tiene dislikes")
+            lt.addLast(xd,dict_id[i][2])
+            lt.addLast(xd,i)
+            lt.addLast(lista_id_top,xd)
+        elif dict_id[i][0]==0:
+            pass
+        else:
+            ratio=dict_id[i][0]/dict_id[i][1]
+            if ratio>umbral:
+                xd = lt.newList("ARRAY_LIST")
+                lt.addLast(xd,dict_id[i][3])
+                lt.addLast(xd,dict_id[i][4])
+                lt.addLast(xd,ratio)
+                lt.addLast(xd,dict_id[i][2])
+                lt.addLast(xd,i)
+                lt.addLast(lista_id_top,xd)
+    return lista_id_top
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -111,6 +157,26 @@ def cmpVideosByLikes(video1, video2):
     """
     return (int(video1['likes']) > int(video2['likes']))
 
+def cmpVideosByTrend(video1, video2):
+    """
+    Devuelve verdadero (True) si los TrendDays :) de video1 son menores que los del video2
+    Args:
+    video1: informacion del primer video que incluye su valor días en Trend
+    video2: informacion del segundo video que incluye su valor días en Trend
+    """
+    days1 = lt.getElement(video1,4)
+    days2 = lt.getElement(video2,4)
+    if days1 == days2:
+        rat1 = lt.getElement(video1,3)
+        rat2 = lt.getElement(video2,3)
+        if type(rat1) != float or type(rat2) != float:
+            rta = (days1 > days2)
+        else:
+            rta = (rat1 > rat2)
+    else:
+        rta = (days1 > days2)
+    return rta
+
 # Funciones de ordenamiento
 def comoOrdenar (sub_list,cmpF,ordAlg):
     if ordAlg == 1:
@@ -127,3 +193,11 @@ def comoOrdenar (sub_list,cmpF,ordAlg):
 def sortVideos (listaO,ordAlg,cmp):
     sorted_list = comoOrdenar(listaO,cmp,ordAlg)
     return sorted_list
+
+def sortVideos3 (listaFinal,ordAlg,cmp):
+    sortedList=comoOrdenar(listaFinal,cmp,ordAlg)
+    if lt.size(sortedList) == 0:
+        return "No hay ningún video con ese ratio de likes/dislikes"
+    else:
+        top_trend=lt.firstElement(sortedList)
+        return top_trend
