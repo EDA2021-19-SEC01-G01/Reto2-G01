@@ -45,10 +45,12 @@ los mismos.
 def newCatalog():
     
     catalog = {'videos': None,
-               'categorias': None}
+               'categorias': None,
+                "paises" : None}
 
     catalog['videos'] = lt.newList('ARRAY_LIST')
     catalog['categorias'] = mp.newMap(18,maptype='PROBING',loadfactor=0.5)
+    catalog["paises"]=mp.newMap(10,maptype="PROBING",loadfactor=0.5)
     return catalog
 # Funciones para agregar informacion al catalogo
 def addCategory(catalog, id):
@@ -57,6 +59,9 @@ def addCategory(catalog, id):
     """
     mp.put(catalog['categorias'],id,lt.newList('ARRAY_LIST'))
 
+def addCountry (catalog,country):
+    mp.put(catalog['paises'],country,lt.newList('ARRAY_LIST'))
+
 def addVideo(catalog, video):
     lt.addLast(catalog['videos'],video)
 
@@ -64,6 +69,9 @@ def addVideoPerCat(catalog,video,id):
     lista = (mp.get(catalog['categorias'],id))['value']
     lt.addLast(lista,video)
 
+def addVideoPerC (catalog,video,country):
+    lista = (mp.get(catalog['paises'],country))['value']
+    lt.addLast(lista,video)
 # Funciones para creacion de datos
 
 # Funciones de consulta
@@ -76,6 +84,11 @@ def reqUno (catalog,n,categoria,pais):
     catSort = sortVideos(dataCat,4,cmpVideosByLikes)
     catPais = lt.subList(filtroPais(catSort,pais),1,n)
     return catPais
+
+def reqDos (catalog,country):
+    dataPais=(mp.get(catalog['paises'],country))['value']
+    soloTop = ratioLikesDislikes(dataPais,10)
+    return sortVideos3(soloTop,4,cmpVideosByTrend)
 
 def reqTres (catalog, category):
     dataCat = (mp.get(catalog['categorias'],category))['value']

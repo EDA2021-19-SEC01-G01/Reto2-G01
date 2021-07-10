@@ -63,14 +63,20 @@ def loadVideos(catalog):
     booksfile = cf.data_dir + 'videos-large.csv'
     input_file = csv.DictReader(open(booksfile, encoding='utf-8'),delimiter=',')
     categorias = []
+    paises=[]
     for video in input_file:
         id = video['category_id']
+        pais=video["country"]
         if (id not in categorias):
             categorias.append(id)
             model.addCategory(catalog,id)
         model.addVideoPerCat(catalog,video,id)
         model.addVideo(catalog, video)
-
+        if pais not in paises:
+            paises.append(pais)
+            model.addCountry(catalog,pais)
+        model.addVideoPerC(catalog,video,pais)
+        
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
@@ -80,6 +86,9 @@ def reqCero(catalog,n,cate):
 
 def reqUno(catalog,n,categoria,pais):
     return model.reqUno(catalog,n,categoria,pais)
+
+def reqDos(catalog,country):
+    return model.reqDos(catalog,country)
 
 def reqTres(catalog,category):
     return model.reqTres(catalog,category)
