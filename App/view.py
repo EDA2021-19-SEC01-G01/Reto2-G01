@@ -42,6 +42,7 @@ def printMenu():
     print("3- Requerimiento 1")
     print("4- Requerimiento 2")
     print("5- Requerimiento 3")
+    print("6- Requerimiento 4")
     print("0- Salir")
 
 catalog = None
@@ -72,10 +73,26 @@ while True:
         print(controller.reqUno(catalog,n,categoria,pais))
     elif int(inputs)== 4:
         pais = input("Ingrese el país filtro: ")
-        print(controller.reqDos(catalog,pais))
+        gold = (controller.reqDos(catalog,pais))['elements']
+        if gold == "No hay ningún video con ese ratio de likes/dislikes":
+            print(gold)
+        else:
+            for ind in range(1,lt.size(gold)+1):
+               print(lt.getElement(gold,ind))
     elif int(inputs) == 5:
         category = input("Ingrese la categoría a consultar: ")
-        print((controller.reqTres(catalog,category))['elements'])
+        silver = (controller.reqTres(catalog,category))['elements']
+        if silver == "No hay ningún video con ese ratio de likes/dislikes":
+            print(silver)
+        else:
+            for ind in range(1,lt.size(silver)+1):
+               print(lt.getElement(silver,ind))
+    elif int(inputs) == 6:
+        pais = input("Ingrese el filtro por país: ")
+        n = int(input("Ingrese el número de videos a listar: "))
+        tag = input("Ingrese la etiqueta del video: ")
+        rtas = controller.reqCuatro(catalog,pais,n,tag)
+        print(rtas)
     elif int(inputs) == 0:
         sys.exit(0)
     else:

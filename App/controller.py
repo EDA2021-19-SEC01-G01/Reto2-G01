@@ -93,6 +93,9 @@ def reqDos(catalog,country):
 def reqTres(catalog,category):
     return model.reqTres(catalog,category)
 
+def reqCuatro(catalog,pais,n,tag):
+    return model.reqCuatro(catalog,pais,n,tag)
+
 # Funciones para medir tiempo y memoria
 
 def getTime():

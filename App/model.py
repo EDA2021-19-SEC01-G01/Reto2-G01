@@ -75,6 +75,16 @@ def addVideoPerC (catalog,video,country):
 # Funciones para creacion de datos
 
 # Funciones de consulta
+def printReq1(lista, criterios):
+    listaFinalFinal = lt.newList('ARRAY_LIST')
+    for j in range(1,lt.size(lista)+1):
+        listaPorVideo = lt.newList('ARRAY_LIST')
+        for crit in criterios:
+            video = lt.getElement(lista,j)
+            lt.addLast(listaPorVideo,video[crit])
+        lt.addLast(listaFinalFinal,listaPorVideo)
+    return listaFinalFinal
+
 def reqCero (catalog, n, cate):
     dataCat = (mp.get(catalog['categorias'],cate))['value']
     return (lt.subList(sortVideos(dataCat,4,cmpVideosByViews),1,n))
@@ -82,8 +92,12 @@ def reqCero (catalog, n, cate):
 def reqUno (catalog,n,categoria,pais):
     dataCat = (mp.get(catalog['categorias'],categoria))['value']
     catSort = sortVideos(dataCat,4,cmpVideosByLikes)
-    catPais = lt.subList(filtroPais(catSort,pais),1,n)
-    return catPais
+    if lt.size(catSort) >= n:
+        catPais = lt.subList(filtroPais(catSort,pais),1,n)
+    else:
+        catPais = catSort
+    listaImprimir = printReq1(catPais, ['trending_date','title','channel_title','publish_time','views','likes','dislikes'])
+    return listaImprimir
 
 def reqDos (catalog,country):
     dataPais=(mp.get(catalog['paises'],country))['value']
@@ -94,6 +108,45 @@ def reqTres (catalog, category):
     dataCat = (mp.get(catalog['categorias'],category))['value']
     soloTop = ratioLikesDislikes(dataCat,20)
     return sortVideos3(soloTop,4,cmpVideosByTrend)
+
+def reqCuatro(c,p,n,t):
+    clas = lt.newList("ARRAY_LIST")
+    ids = []
+    vid = mp.get(c['paises'],p)['value']
+    dicc= {}
+    for i in range(1,lt.size(vid)+1):
+        ele = lt.getElement(vid,i)
+        id = ele['video_id']
+        tag = ele["tags"]
+        a2,a3=(id not in ids), (t in tag)
+        if  a2 and a3 :
+            ids.append(id)
+            e= lt.newList("ARRAY_LIST")
+            dicc[id]= e
+            lt.addLast(dicc[id],ele)
+        elif a3:
+            lt.addLast(dicc[id],ele)
+        
+    for i in dicc.keys():
+        if lt.size(dicc[i]) > 0:
+            d= sortvideos4(dicc[i],4,cmpVideosByComments)
+            lt.addLast(clas,d)
+        else:
+            print(dicc[i])
+            lt.addLast(clas,lt.firstElement(dicc[i]))
+    
+    l_final= comoOrdenar(clas,cmpVideosByComments,4)
+    if lt.size(l_final) >= n:
+        rta = lt.subList(l_final,1,n)
+    else:
+        rta = l_final
+
+    rtaF = printReq1(rta,['title', 'channel_title','publish_time','views','likes','dislikes','comment_count','tags'])
+    finaliza = []
+    for indice in range(1,lt.size(rtaF)+1):
+        dato = lt.getElement(rtaF,indice)
+        finaliza.append(dato['elements'])
+    return finaliza
 
 def filtroPais(lista, country):
     soloCountry = lt.newList("ARRAY_LIST")
@@ -190,6 +243,9 @@ def cmpVideosByTrend(video1, video2):
         rta = (days1 > days2)
     return rta
 
+def cmpVideosByComments(video1,video2):
+    return (int(video1['comment_count']) > int(video2['comment_count']))
+
 # Funciones de ordenamiento
 def comoOrdenar (sub_list,cmpF,ordAlg):
     if ordAlg == 1:
@@ -214,3 +270,8 @@ def sortVideos3 (listaFinal,ordAlg,cmp):
     else:
         top_trend=lt.firstElement(sortedList)
         return top_trend
+
+def sortvideos4(lista,oa,cmp):
+    sortedList=comoOrdenar(lista,cmp,oa)
+    rta= lt.firstElement(sortedList)
+    return rta
