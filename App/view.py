@@ -77,16 +77,19 @@ while True:
         if gold == "No hay ningún video con ese ratio de likes/dislikes":
             print(gold)
         else:
-            for ind in range(1,lt.size(gold)+1):
-               print(lt.getElement(gold,ind))
+            for ind in range(len(gold)-1):
+               print(gold[ind])
+            print(pais)
     elif int(inputs) == 5:
         category = input("Ingrese la categoría a consultar: ")
         silver = (controller.reqTres(catalog,category))['elements']
         if silver == "No hay ningún video con ese ratio de likes/dislikes":
             print(silver)
         else:
-            for ind in range(1,lt.size(silver)+1):
-               print(lt.getElement(silver,ind))
+            print(silver)
+            for ind in range(len(silver)-1):
+               print(silver[ind])
+            print("categoria: "+ category)
     elif int(inputs) == 6:
         pais = input("Ingrese el filtro por país: ")
         n = int(input("Ingrese el número de videos a listar: "))

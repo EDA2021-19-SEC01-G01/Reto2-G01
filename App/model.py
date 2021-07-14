@@ -82,8 +82,8 @@ def printReq1(lista, criterios):
         for crit in criterios:
             video = lt.getElement(lista,j)
             lt.addLast(listaPorVideo,video[crit])
-        lt.addLast(listaFinalFinal,listaPorVideo)
-    return listaFinalFinal
+        lt.addLast(listaFinalFinal,listaPorVideo['elements'])
+    return listaFinalFinal['elements']
 
 def reqCero (catalog, n, cate):
     dataCat = (mp.get(catalog['categorias'],cate))['value']
@@ -142,11 +142,7 @@ def reqCuatro(c,p,n,t):
         rta = l_final
 
     rtaF = printReq1(rta,['title', 'channel_title','publish_time','views','likes','dislikes','comment_count','tags'])
-    finaliza = []
-    for indice in range(1,lt.size(rtaF)+1):
-        dato = lt.getElement(rtaF,indice)
-        finaliza.append(dato['elements'])
-    return finaliza
+    return rtaF
 
 def filtroPais(lista, country):
     soloCountry = lt.newList("ARRAY_LIST")
