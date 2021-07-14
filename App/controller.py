@@ -85,16 +85,84 @@ def reqCero(catalog,n,cate):
     return model.reqCero(catalog,n,cate)
 
 def reqUno(catalog,n,categoria,pais):
-    return model.reqUno(catalog,n,categoria,pais)
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+
+    retorno = model.reqUno(catalog,n,categoria,pais)
+
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    print (delta_time, delta_memory)
+    return retorno
 
 def reqDos(catalog,country):
-    return model.reqDos(catalog,country)
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+
+    retorno = model.reqDos(catalog,country)
+
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    print (delta_time, delta_memory)
+    return retorno
 
 def reqTres(catalog,category):
-    return model.reqTres(catalog,category)
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+
+    retorno = model.reqTres(catalog,category)
+
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    print (delta_time, delta_memory)
+    return retorno
 
 def reqCuatro(catalog,pais,n,tag):
-    return model.reqCuatro(catalog,pais,n,tag)
+    delta_time = -1.0
+    delta_memory = -1.0
+
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+
+    retorno = model.reqCuatro(catalog,pais,n,tag)
+
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    print (delta_time, delta_memory)
+    return retorno
 
 # Funciones para medir tiempo y memoria
 
